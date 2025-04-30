@@ -12,7 +12,7 @@ print("🟡 Files in directory:", os.listdir())
 # ---- Load Model ----
 print("🟡 Loading model...")
 def load_model():
-    return SentenceTransformer('all-MiniLM-L6-v2')
+    return SentenceTransformer('all-MiniLM-L6-v2', device='cpu')
 model = load_model()
 print("✅ Model loaded.")
 
