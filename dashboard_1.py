@@ -2,9 +2,10 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
+import os
+import torch
 from sklearn.metrics.pairwise import cosine_similarity
 from sentence_transformers import SentenceTransformer
-import os
 
 # ---- DEBUG: Check working directory ----
 print("🟡 Files in directory:", os.listdir())
@@ -12,7 +13,9 @@ print("🟡 Files in directory:", os.listdir())
 # ---- Load Model ----
 print("🟡 Loading model...")
 def load_model():
-    return SentenceTransformer('all-MiniLM-L6-v2', device='cpu')
+    os.environ["CUDA_VISIBLE_DEVICES"] = ""  # Disable GPU
+    torch_device = "cpu"
+    return SentenceTransformer('all-MiniLM-L6-v2', device=torch_device)
 model = load_model()
 print("✅ Model loaded.")
 
