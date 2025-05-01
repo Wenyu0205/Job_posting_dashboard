@@ -22,7 +22,7 @@ print("✅ Model loaded.")
 # ---- Load Job Data ----
 print("🟡 Loading job data...")
 def load_job_data():
-    df = pd.read_csv('job_embeddings_4.csv')
+    df = pd.read_csv('job_embeddings_5.csv')
     embed_cols = [col for col in df.columns if col.replace('.', '', 1).isdigit()]
     job_vectors = df[embed_cols].values
     return df, job_vectors
@@ -32,7 +32,7 @@ print("✅ Job data loaded:", job_df.shape)
 # ---- Load Skill Embeddings ----
 print("🟡 Loading skill embeddings...")
 def load_skill_embeddings():
-    df = pd.read_csv('skill_embeddings_1.csv')
+    df = pd.read_csv('skill_embeddings_2.csv')
     skill_vec_dict = {row['skill']: row.drop('skill').values for _, row in df.iterrows()}
     return skill_vec_dict
 skill_vec_dict = load_skill_embeddings()
@@ -63,6 +63,16 @@ with tab1:
         match = job_df[job_df['jobtitle'] == final_input]
         if not match.empty:
             idx = match.index[0]
+            selected_row = match.iloc[0]
+
+            # ✅ Show selected job description and skills before top 10
+            st.markdown("### 🎯 Selected Job Overview")
+            st.markdown(f"**📝 Description:**", unsafe_allow_html=True)
+            st.markdown(selected_row['description'], unsafe_allow_html=True)
+            st.markdown(f"**🛠️ Extracted Skills:** {selected_row['extracted_skills']}")
+            st.markdown("---")
+
+            # Compute similarity
             query_vec = job_vectors[idx].reshape(1, -1)
             similarities = cosine_similarity(query_vec, job_vectors)[0]
             top_indices = np.argsort(similarities)[::-1][1:11]
